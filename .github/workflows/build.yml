@@ -29,7 +29,8 @@ jobs:
         with:
           submodules: true
       
-      - name: Update 
+      - name: Update
+        if: ${{ !inputs.f11_test_build }}
         run: |
           cd vanadium
           git fetch --tags
@@ -42,6 +43,17 @@ jobs:
             git commit -am "update"
             git push
           fi
+
+      - name: Check runner resources
+        run: |
+          echo "=== CPU ==="
+          nproc
+          echo "=== MEMORY ==="
+          free -h
+          echo "=== DISK ==="
+          df -h
+          echo "=== VANADIUM VERSION ==="
+          git -C vanadium describe --tags --always
 
       - name: Set ENV
         run: | 
